@@ -10,7 +10,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net"
 	"net/http"
@@ -41,6 +40,7 @@ func NewObject(data global.ObjectData) *Object {
 
 // 上传对象[POST]
 func (obj *Object) UploadObject() {
+	// 获取上传对象详细信息
 	global.Logger.Info("开始上传对象：", *obj)
 	var code string
 
@@ -137,7 +137,7 @@ func GetS3URL(url string) (error, string) {
 		global.Logger.Error("获取临时地址失败:", resp.StatusCode)
 		return errcode.Http_RespError, ""
 	}
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	if err != nil {
 		global.Logger.Error("ioutil.ReadAll err: ", err)
 		return errcode.Http_RespError, ""
@@ -278,7 +278,7 @@ func UploadFile(obj *Object) string {
 	}
 	defer resp.Body.Close()
 
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	if err != nil {
 		global.Logger.Error("ioutil.ReadAll err: ", err)
 		return errcode.Http_RespError.Msg()
@@ -399,7 +399,7 @@ func Multipart_Upload_Init(obj *Object) string {
 	}
 	defer resp.Body.Close()
 
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return errcode.Http_RespError.Msg()
 	}
@@ -522,7 +522,7 @@ func Multipart_Unifile(obj *Object, filepath string, uploadid string, size int64
 		return num, errcode.Http_RequestError.Msg(), resultdata
 	}
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	if err != nil {
 		global.Logger.Error("ioutil.ReadAll got err: ", err)
 		return num, errcode.Http_RespError.Msg(), resultdata
@@ -603,7 +603,7 @@ func Multipart_Completion(obj *Object, uploadid string, fileresult []global.File
 	}
 	defer resp.Body.Close()
 
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return errcode.Http_RespError.Msg()
 	}
@@ -664,7 +664,7 @@ func Multipart_Abortion(obj *Object, uploadid string) string {
 	}
 
 	defer resp.Body.Close()
-	content, err := ioutil.ReadAll(resp.Body)
+	content, err := io.ReadAll(resp.Body)
 	if err != nil {
 		global.Logger.Error("ioutil.ReadAll got err: ", err)
 		return ""

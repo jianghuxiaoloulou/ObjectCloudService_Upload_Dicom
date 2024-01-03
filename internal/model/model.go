@@ -9,9 +9,12 @@ import (
 )
 
 type KeyData struct {
-	rec_id, instance_key                                           sql.NullInt64
-	jpgfile, dcmfile, ip, virpath, dttm_time                       sql.NullString
-	jpgstatus, dcmstatus, objtect_time, Nfsdcmstatus, Nfsjpgstatus sql.NullInt16
+	InstanceKey sql.NullInt64
+	RemoetKey   sql.NullString
+	FileName    sql.NullString
+	Modality    sql.NullString
+	Ip          sql.NullString
+	SVirtualDir sql.NullString
 }
 
 func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*sql.DB, error) {

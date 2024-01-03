@@ -33,366 +33,123 @@ func GetData() {
 	sql := ""
 	switch global.ObjectSetting.OBJECT_Store_Type {
 	case global.PublicCloud:
-		switch global.ObjectSetting.UploadImgFlag {
-		case "001":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_cloud,
-			fr.img_file_exist_obs_cloud,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_cloud = 0 
-			and s.modality != "US" 
-			and s.modality != "ES" 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			order by fr.rec_id ASC 
-			limit ?;`
-		case "010":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_cloud,
-			fr.img_file_exist_obs_cloud,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_cloud = 0 
-			and s.modality = "US" 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			order by fr.rec_id ASC 
-			limit ?;`
-		case "100":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_cloud,
-			fr.img_file_exist_obs_cloud,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_cloud = 0 
-			and s.modality = "ES" 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			order by fr.rec_id ASC 
-			limit ?;`
-		case "011":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_cloud,
-			fr.img_file_exist_obs_cloud,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_cloud = 0 
-			and s.modality != "ES" 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			order by fr.rec_id ASC 
-			limit ?;`
-		case "101":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_cloud,
-			fr.img_file_exist_obs_cloud,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_cloud = 0 
-			and s.modality != "US" 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			order by fr.rec_id ASC 
-			limit ?;`
-		case "110":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_cloud,
-			fr.img_file_exist_obs_cloud,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_cloud = 0 
-			and s.modality in ("US","ES") 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			order by fr.rec_id ASC 
-			limit ?;`
-		case "111":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_cloud,
-			fr.img_file_exist_obs_cloud,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_cloud = 0 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			AND timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			ORDER BY fr.rec_id ASC 
-			LIMIT ?;`
-		}
+		sql = `select fr.instance_key,fr.dcm_file_name_remote from file_remote fr 
+		where 1= 1
+		and fr.dcm_file_exist = 1
+		and fr.dcm_file_exist_obs_cloud = 0
+		and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ?
+		limit ?;`
 	case global.PrivateCloud:
-		switch global.ObjectSetting.UploadImgFlag {
-		case "001":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_local,
-			fr.img_file_exist_obs_local,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_local = 0 
-			and s.modality != "US" 
-			and s.modality != "ES" 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			ORDER BY fr.rec_id ASC 
-			LIMIT ?;`
-		case "010":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_local,
-			fr.img_file_exist_obs_local,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_local = 0 
-			and s.modality = "US" 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			ORDER BY fr.rec_id ASC 
-			LIMIT ?;`
-		case "100":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_local,
-			fr.img_file_exist_obs_local,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_local = 0 
-			and s.modality = "ES" 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			ORDER BY fr.rec_id ASC 
-			LIMIT ?;`
-		case "011":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_local,
-			fr.img_file_exist_obs_local,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_local = 0 
-			and s.modality != "ES" 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			ORDER BY fr.rec_id ASC 
-			LIMIT ?;`
-		case "101":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_local,
-			fr.img_file_exist_obs_local,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_local = 0 
-			and s.modality != "US" 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			ORDER BY fr.rec_id ASC 
-			LIMIT ?;`
-		case "110":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_local,
-			fr.img_file_exist_obs_local,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			left join study s on ins.study_key = s.study_key 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_local = 0 
-			and s.modality in ("US","ES") 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			ORDER BY fr.rec_id ASC 
-			LIMIT ?;`
-		case "111":
-			sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_local,
-			fr.img_file_exist_obs_local,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-			FROM file_remote fr 
-			LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-			LEFT JOIN image im ON im.instance_key = fr.instance_key 
-			LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-			where 1 =1 
-			and fr.rec_id > ? 
-			and fr.dcm_file_exist = 1 
-			and fr.dcm_file_exist_obs_local = 0 
-			and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-			and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-			ORDER BY fr.rec_id ASC 
-			LIMIT ?;`
-		}
+		sql = `select fr.instance_key,fr.dcm_file_name_remote from file_remote fr 
+		where 1= 1
+		and fr.dcm_file_exist = 1
+		and fr.dcm_file_exist_obs_local = 0
+		and timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ?
+		limit ?;`
 	}
-	if global.ReadDBEngine.Ping() != nil {
-		global.Logger.Error("ReadDBEngine.ping() err: ", global.ReadDBEngine.Ping())
-		global.RunStatus = false
-		return
-	}
-	rows, err := global.ReadDBEngine.Query(sql, global.TargetValue, global.ObjectSetting.OBJECT_TIME, global.GeneralSetting.MaxTasks)
-	global.Logger.Debug("当前查询的范围的rec_id 是：", global.TargetValue)
+	err := global.ReadDBEngine.Ping()
 	if err != nil {
-		global.Logger.Fatal(err)
-		global.RunStatus = false
+		global.Logger.Error("ReadDBEngine.ping() err: ", err)
+		global.ReadDBEngine.Close()
+		global.ReadDBEngine, _ = NewDBEngine(global.DatabaseSetting)
+	}
+	rows, err := global.ReadDBEngine.Query(sql, global.ObjectSetting.OBJECT_TIME, global.GeneralSetting.MaxTasks)
+	if err != nil {
+		global.Logger.Error(err)
 		return
 	}
 	defer rows.Close()
 	for rows.Next() {
-		global.TargetValue += 1
 		key := KeyData{}
-		err = rows.Scan(&key.rec_id, &key.instance_key, &key.Nfsdcmstatus, &key.Nfsjpgstatus, &key.dcmstatus,
-			&key.jpgstatus, &key.dcmfile, &key.jpgfile, &key.ip, &key.virpath)
+		err = rows.Scan(&key.InstanceKey, &key.RemoetKey)
 		if err != nil {
-			global.Logger.Fatal("rows.Scan error: ", err)
-			global.RunStatus = false
-			return
+			global.Logger.Error("rows.Scan error: ", err)
+			continue
 		}
-		// DICOM
-		if key.dcmstatus.Int16 == int16(global.FileNotExist) && key.Nfsdcmstatus.Int16 == int16(global.FileExist) && key.dcmfile.String != "" {
-			fike_key, file_path := general.GetFilePath(key.dcmfile.String, key.ip.String, key.virpath.String)
-			global.Logger.Info("需要处理的文件名：", file_path)
-			data := global.ObjectData{
-				InstanceKey: key.instance_key.Int64,
-				FileKey:     fike_key,
-				FilePath:    file_path,
-				Type:        global.DCM,
-				Count:       1,
+		// 获取文件路径
+		info := GetFileInfo(key.InstanceKey.Int64)
+		if info.FileName == "" {
+			// 异常数据不需要处理，更新为错误数据
+			UpdateLocalStatus(key.InstanceKey.Int64)
+			continue
+		}
+		// 判断数据是否是上传数据
+		var dataFlag bool
+		switch global.ObjectSetting.UploadImgFlag {
+		case "001":
+			if info.Modality != "US" && info.Modality != "ES" {
+				dataFlag = true
 			}
-			global.ObjectDataChan <- data
+		case "010":
+			if info.Modality == "US" {
+				dataFlag = true
+			}
+		case "011":
+			if info.Modality != "ES" {
+				dataFlag = true
+			}
+		case "100":
+			if info.Modality == "ES" {
+				dataFlag = true
+			}
+		case "101":
+			if info.Modality != "US" {
+				dataFlag = true
+			}
+		case "110":
+			if info.Modality == "US" && info.Modality == "ES" {
+				dataFlag = true
+			}
+		case "111":
+			dataFlag = true
+		default:
+			dataFlag = true
 		}
-		if key.Nfsdcmstatus.Int16 == int16(global.FileExist) && key.dcmfile.String == "" {
-			//异常数据不需要处理，更新为错误数据
-			UpdateLocalStatus(key.instance_key.Int64)
+		if !dataFlag {
+			global.Logger.Info("数据上传设置为：", global.ObjectSetting.UploadImgFlag, "该数据不需要上传处理,更新文件状态为4,数据key: ", key.InstanceKey.Int64)
+			UpdateLocalStatus(key.InstanceKey.Int64)
+			continue
 		}
+		filekey, filepath := general.GetFilePath(info.FileName, info.Ip, info.SVirtualDir)
+
+		data := global.ObjectData{
+			InstanceKey: key.InstanceKey.Int64,
+			FileKey:     filekey,
+			FilePath:    filepath,
+			Type:        global.DCM,
+			Count:       1,
+		}
+		global.ObjectDataChan <- data
 	}
 }
 
-func GetDataJPG() {
-	sql := ""
-	switch global.ObjectSetting.OBJECT_Store_Type {
-	case global.PublicCloud:
-		sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_cloud,
-		fr.img_file_exist_obs_cloud,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-		FROM file_remote fr 
-		LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-		LEFT JOIN image im ON im.instance_key = fr.instance_key 
-		LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-		where 1 =1 
-		and fr.rec_id > ? 
-		and fr.img_file_exist = 1 
-		and fr.img_file_exist_obs_cloud = 0 
-		and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-		AND timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-		ORDER BY fr.rec_id ASC 
-		LIMIT ?;`
-	case global.PrivateCloud:
-		sql = `SELECT fr.rec_id,fr.instance_key,fr.dcm_file_exist,fr.img_file_exist,fr.dcm_file_exist_obs_local,
-		fr.img_file_exist_obs_local,ins.file_name,im.img_file_name,sl.ip,sl.s_virtual_dir 
-		FROM file_remote fr 
-		LEFT JOIN instance ins on fr.instance_key = ins.instance_key 
-		LEFT JOIN image im ON im.instance_key = fr.instance_key 
-		LEFT JOIN study_location sl on sl.n_station_code = ins.location_code 
-		where 1 =1 
-		and fr.rec_id > ? 
-		and fr.img_file_exist = 1 
-		and fr.img_file_exist_obs_local = 0 
-		and timestampdiff(minute,fr.dcm_update_time_retrieve,NOW()) >= 5 
-		AND timestampdiff(YEAR,fr.dcm_update_time_retrieve,now()) <= ? 
-		ORDER BY fr.rec_id ASC 
-		LIMIT ?;`
-	}
-	if global.ReadDBEngine.Ping() != nil {
-		global.Logger.Error("ReadDBEngine.ping() err: ", global.ReadDBEngine.Ping())
-		global.RunStatus = false
-		return
-	}
-	rows, err := global.ReadDBEngine.Query(sql, global.TargetValue, global.ObjectSetting.OBJECT_TIME, global.GeneralSetting.MaxTasks)
-	global.Logger.Debug("当前查询的范围的rec_id 是：", global.TargetValue)
+func GetFileInfo(instancekey int64) (info global.FileInfo) {
+	sql := `select ins.file_name,s.modality,sl.ip,sl.s_virtual_dir 
+	from instance ins 
+	left join study s on ins.study_key = s.study_key 
+	left join study_location sl on sl.n_station_code = ins.location_code 
+	where ins.instance_key = ?;`
+	err := global.ReadDBEngine.Ping()
 	if err != nil {
-		global.Logger.Fatal(err)
-		global.RunStatus = false
+		global.Logger.Error("ReadDBEngine.ping() err: ", err)
+		global.ReadDBEngine.Close()
+		global.ReadDBEngine, _ = NewDBEngine(global.DatabaseSetting)
 		return
 	}
-	defer rows.Close()
-	for rows.Next() {
-		global.TargetValue += 1
-		key := KeyData{}
-		err = rows.Scan(&key.rec_id, &key.instance_key, &key.Nfsdcmstatus, &key.Nfsjpgstatus, &key.dcmstatus,
-			&key.jpgstatus, &key.dcmfile, &key.jpgfile, &key.ip, &key.virpath)
-		if err != nil {
-			global.Logger.Fatal("rows.Scan error: ", err)
-			global.RunStatus = false
-			return
-		}
-		// JPG
-		if key.jpgstatus.Int16 == int16(global.FileNotExist) && key.Nfsjpgstatus.Int16 == int16(global.FileExist) && key.jpgfile.String != "" {
-			fike_key, file_path := general.GetFilePath(key.jpgfile.String, key.ip.String, key.virpath.String)
-			global.Logger.Info("需要处理的文件名：", file_path)
-			data := global.ObjectData{
-				InstanceKey: key.instance_key.Int64,
-				FileKey:     fike_key,
-				FilePath:    file_path,
-				Type:        global.JPG,
-				Count:       1,
-			}
-			global.ObjectDataChan <- data
-		}
-		if key.Nfsjpgstatus.Int16 == int16(global.FileExist) && key.jpgfile.String == "" {
-			//异常数据不需要处理，更新为错误数据
-			UpdateLocalJPGStatus(key.instance_key.Int64)
-		}
+	row := global.ReadDBEngine.QueryRow(sql, instancekey)
+	key := KeyData{}
+	err = row.Scan(&key.FileName, &key.Modality, &key.Ip, &key.SVirtualDir)
+	if err != nil {
+		global.Logger.Error(err)
+		return
 	}
+	info = global.FileInfo{
+		FileName:    key.FileName.String,
+		Modality:    key.Modality.String,
+		Ip:          key.Ip.String,
+		SVirtualDir: key.SVirtualDir.String,
+	}
+	return
 }
 
 // 更新异常的DCM字段
@@ -404,9 +161,11 @@ func UpdateLocalStatus(key int64) {
 	case global.PrivateCloud:
 		sql = `update file_remote fr set fr.dcm_file_exist_obs_local = 4 where fr.instance_key = ?;`
 	}
-	if global.WriteDBEngine.Ping() != nil {
-		global.Logger.Error("WriteDBEngine.ping() err: ", global.ReadDBEngine.Ping())
-		return
+	err := global.WriteDBEngine.Ping()
+	if err != nil {
+		global.Logger.Error("WriteDBEngine.ping() err: ", err)
+		global.WriteDBEngine.Close()
+		global.WriteDBEngine, _ = NewDBEngine(global.DatabaseSetting)
 	}
 	global.WriteDBEngine.Exec(sql, key)
 }
@@ -420,9 +179,11 @@ func UpdateLocalJPGStatus(key int64) {
 	case global.PrivateCloud:
 		sql = `update file_remote fr set fr.img_file_exist_obs_local = 4 where fr.instance_key = ?;`
 	}
-	if global.WriteDBEngine.Ping() != nil {
-		global.Logger.Error("WriteDBEngine.ping() err: ", global.ReadDBEngine.Ping())
-		return
+	err := global.WriteDBEngine.Ping()
+	if err != nil {
+		global.Logger.Error("WriteDBEngine.ping() err: ", err)
+		global.WriteDBEngine.Close()
+		global.WriteDBEngine, _ = NewDBEngine(global.DatabaseSetting)
 	}
 	global.WriteDBEngine.Exec(sql, key)
 }
@@ -430,9 +191,11 @@ func UpdateLocalJPGStatus(key int64) {
 // 上传数据后更新数据库
 func UpdateUplaod(key int64, filetype global.FileType, remotekey string, status bool) {
 	// 获取更新时时间
-	if global.WriteDBEngine.Ping() != nil {
-		global.Logger.Error("WriteDBEngine.ping() err: ", global.ReadDBEngine.Ping())
-		return
+	err := global.WriteDBEngine.Ping()
+	if err != nil {
+		global.Logger.Error("WriteDBEngine.ping() err: ", err)
+		global.WriteDBEngine.Close()
+		global.WriteDBEngine, _ = NewDBEngine(global.DatabaseSetting)
 	}
 	switch global.ObjectSetting.OBJECT_Store_Type {
 	case global.PublicCloud:

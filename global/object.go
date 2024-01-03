@@ -38,6 +38,13 @@ type ObjectData struct {
 	Count       int      // 文件执行次数
 }
 
+type FileInfo struct {
+	FileName    string
+	Modality    string
+	Ip          string
+	SVirtualDir string
+}
+
 var (
 	ObjectDataChan chan ObjectData
 	RunStatus      bool // 当前获取的数据是否运行完成

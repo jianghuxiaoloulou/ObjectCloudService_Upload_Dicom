@@ -18,7 +18,7 @@ General:
 Database:
   # 树兰安吉医院：espacs:Espacs@2020@tcp(172.16.0.7:3306)/espacs?charset=utf8
   # 杭州树兰医院：espacs:espacs@2017@tcp(10.20.32.212:31967)/espacs?charset=utf8
-  DBConn: espacs:Espacs@2020@tcp(172.16.0.7:3306)/espacs?charset=utf8
+  DBConn: hrp:asdf@123@tcp(10.110.20.133:30664)/espacs?charset=utf8
   # DBConn: hrp:asdf@123@tcp(10.110.20.133:30664)/espacs?charset=utf8  
   DBType: mysql
   MaxIdleConns: 100
